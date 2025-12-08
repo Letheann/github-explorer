@@ -5,7 +5,7 @@ import java.util.Properties
 object Config {
     const val applicationId = "com.desafio.githubexplorer"
     const val applicationIdTest = "com.desafio.githubexplorer"
-    const val kmpModule = "com.desafio.shared"
+    const val kmpModule = "com.desafio.kmp"
     const val resConfig = "pt"
     val versionName = getCurrentVersionName()
     val versionCode = getCurrentVersionCode()
@@ -28,7 +28,7 @@ object Config {
 
     private fun getVersionProperties(): Properties {
         val versionProperties = Properties()
-        val file = File("version.properties")
+        val file = File("local.properties")
         versionProperties.load(FileInputStream(file))
         return versionProperties
     }

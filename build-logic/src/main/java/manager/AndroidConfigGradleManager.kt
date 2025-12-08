@@ -77,7 +77,7 @@ internal fun Project.configAndroidDefault() {
 }
 
 internal fun Project.nameSpace(): String = Config.applicationId.plus(project.name)
-    .replace("desafio-android", "")
+    .replace("githubexplorer", "")
     .replace(":", ".")
     .replace("'", "")
     .replace("-", "")
