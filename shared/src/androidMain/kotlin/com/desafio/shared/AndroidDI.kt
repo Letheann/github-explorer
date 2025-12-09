@@ -1,5 +1,6 @@
 package com.desafio.shared
 
+import com.desafio.shared.data.api.GithubApi
 import com.desafio.shared.repository.GithubReposRepository
 import com.desafio.shared.repository.GithubReposRepositoryImpl
 import com.desafio.shared.usecase.GithubReposUseCase
@@ -18,10 +19,14 @@ object AndroidDI {
                 install(ContentNegotiation) {
                     json(Json {
                         ignoreUnknownKeys = true
+                        isLenient = true
+                        prettyPrint = false
+                        encodeDefaults = true
                     })
                 }
             }
         }
+        factory { GithubApi(get()) }
         factory<GithubReposRepository> { GithubReposRepositoryImpl(get()) }
         factory<GithubReposUseCase> { GithubReposUseCaseImpl(get()) }
     }

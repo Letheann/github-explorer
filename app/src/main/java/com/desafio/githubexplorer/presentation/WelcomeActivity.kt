@@ -11,7 +11,6 @@ import com.desafio.githubexplorer.core.theme.SimpleloginTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class WelcomeActivity : AppCompatActivity() {
 
     private val viewModel: WelcomeViewModel by viewModel<WelcomeViewModel>()
@@ -20,10 +19,12 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SimpleloginTheme {
-                RecyclerCompose(viewModel,
-                    invokeClick = { id ->
-                        viewModel.intent(ViewIntent.OnClickCard(id))
-                    })
+                RecyclerCompose(
+                    viewModel = viewModel,
+                    invokeClick = { owner, repo ->
+                        viewModel.intent(ViewIntent.OnClickCard(owner, repo))
+                    }
+                )
             }
         }
         LifecycleRegistry(this).currentState = Lifecycle.State.CREATED
@@ -33,11 +34,9 @@ class WelcomeActivity : AppCompatActivity() {
     private fun handleViewEffect() = lifecycleScope.launch {
         viewModel.viewEffect.collect { effect ->
             when (effect) {
-                is ViewEffect.EffectToView -> {
-
+                is ViewEffect.NavigateToDetail -> {
                 }
             }
         }
     }
 }
-

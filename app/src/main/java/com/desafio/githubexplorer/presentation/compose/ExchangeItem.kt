@@ -37,13 +37,14 @@ import coil.compose.rememberAsyncImagePainter
 import com.desafio.githubexplorer.core.presentation.ViewResource
 import com.desafio.githubexplorer.presentation.ViewIntent
 import com.desafio.githubexplorer.presentation.WelcomeViewModel
+import com.desafio.shared.data.dto.Owner
 import com.desafio.shared.data.dto.Repo
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecyclerCompose(
     viewModel: WelcomeViewModel,
-    invokeClick: (id: Long?) -> Unit,
+    invokeClick: (owner: String, repo: String) -> Unit,
     disposable: () -> Unit = {}
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -52,8 +53,8 @@ fun RecyclerCompose(
 
     LaunchedEffect(lifecycleState) {
         when (lifecycleState) {
-            Lifecycle.State.RESUMED -> if (uiState.items == null) viewModel.intent(ViewIntent.GetRepos)
-            Lifecycle.State.CREATED -> viewModel.intent(ViewIntent.GetRepos)
+            Lifecycle.State.RESUMED -> if (uiState.searchResult == null) viewModel.intent(ViewIntent.GetPopularRepos())
+            Lifecycle.State.CREATED -> viewModel.intent(ViewIntent.GetPopularRepos())
             else -> {}
         }
     }
@@ -67,23 +68,16 @@ fun RecyclerCompose(
         }
     }
 
-    when (val states = uiState.items) {
+    when (val states = uiState.searchResult) {
         is ViewResource.Success -> {
             LazyColumn(Modifier.fillMaxSize()) {
-                items(states.data) { repo ->
+                items(states.data.items) { repo ->
                     RepoCompose(repo = repo, invokeClick = invokeClick)
                 }
             }
         }
-
-        is ViewResource.Loading -> {
-            Indicator()
-        }
-
-        is ViewResource.Error -> {
-            CharacterError()
-        }
-
+        is ViewResource.Loading -> Indicator()
+        is ViewResource.Error -> CharacterError()
         else -> {}
     }
 }
@@ -92,10 +86,10 @@ fun RecyclerCompose(
 @Composable
 fun RepoCompose(
     repo: Repo,
-    invokeClick: (id: Long?) -> Unit
+    invokeClick: (owner: String, repo: String) -> Unit
 ) {
     Card(
-        onClick = { invokeClick(repo.id) },
+        onClick = { invokeClick(repo.owner.login, repo.name) },
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
@@ -109,8 +103,8 @@ fun RepoCompose(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = rememberAsyncImagePainter(repo.owner?.avatar_url ?: ""),
-                contentDescription = repo.owner?.login,
+                painter = rememberAsyncImagePainter(repo.owner.avatarUrl),
+                contentDescription = repo.owner.login,
                 modifier = Modifier
                     .size(64.dp)
                     .clip(RoundedCornerShape(8.dp))
@@ -120,7 +114,7 @@ fun RepoCompose(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = repo.full_name ?: "Unknown Repo",
+                    text = repo.fullName,
                     style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.primary),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -141,13 +135,20 @@ fun RepoCompose(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
+                    repo.language?.let { language ->
+                        Text(
+                            text = "📝 $language",
+                            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.secondary)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
                     Text(
-                        text = "⭐ ${repo.stargazers_count ?: 0}",
+                        text = "⭐ ${repo.stargazersCount}",
                         style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.secondary)
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "🍴 ${repo.forks_count ?: 0}",
+                        text = "🍴 ${repo.forksCount}",
                         style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.secondary)
                     )
                 }
@@ -168,17 +169,30 @@ fun RepoItemPreview() {
             repo = Repo(
                 id = 1,
                 name = "kotlin-explorer",
-                full_name = "user/kotlin-explorer",
+                fullName = "user/kotlin-explorer",
                 description = "A sample Kotlin repo",
-                stargazers_count = 123,
-                forks_count = 45,
-                owner = com.desafio.shared.data.dto.Owner(
+                htmlUrl = "https://github.com/user/kotlin-explorer",
+                language = "Kotlin",
+                stargazersCount = 123,
+                watchersCount = 100,
+                forksCount = 45,
+                openIssuesCount = 5,
+                owner = Owner(
+                    id = 1,
                     login = "user",
-                    avatar_url = "https://avatars.githubusercontent.com/u/1?v=4"
+                    avatarUrl = "https://avatars.githubusercontent.com/u/1?v=4",
+                    htmlUrl = "https://github.com/user",
+                    type = "User"
                 ),
-                updated_at = "2025-12-08T12:00:00Z"
+                createdAt = "2025-01-01T12:00:00Z",
+                updatedAt = "2025-12-08T12:00:00Z",
+                pushedAt = "2025-12-08T12:00:00Z",
+                isPrivate = false,
+                isFork = false,
+                defaultBranch = "main",
+                topics = listOf("kotlin", "android")
             ),
-            invokeClick = { /* click action */ }
+            invokeClick = { _, _ -> }
         )
     }
 }

@@ -1,6 +1,9 @@
 package com.desafio.shared.data.dto
 
 data class Owner(
-    val login: String?,
-    val avatar_url: String?
+    val id: Long,
+    val login: String,
+    val avatarUrl: String,
+    val htmlUrl: String,
+    val type: String?
 )
