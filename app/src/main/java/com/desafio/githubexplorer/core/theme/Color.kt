@@ -1,4 +1,4 @@
-package com.desafio.githubexplorer.ui.theme
+package com.desafio.githubexplorer.core.theme
 
 import androidx.compose.ui.graphics.Color
 

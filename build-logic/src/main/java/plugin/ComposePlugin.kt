@@ -46,7 +46,6 @@ class ComposePlugin : Plugin<Project> {
             debugImplementation(libs.getLibrary("compose.ui.tooling"))
             debugImplementation(libs.getLibrary("compose.manifest"))
 
-            androidTestImplementation(libs.getLibrary("compose.junit4"))
             androidTestImplementation(libs.getLibrary("compose.ui.navigation"))
             testImplementation(libs.getLibrary("compose.ui.test"))
             testImplementation(libs.getLibrary("compose.uitest"))

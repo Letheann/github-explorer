@@ -8,3 +8,13 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.android.lint) apply false
 }
+allprojects{
+    configurations.all {
+        resolutionStrategy.force(libs.okHttp3.core)
+        resolutionStrategy.force(libs.test.objenesis)
+    }
+}
+
+tasks.register("clean").configure {
+    delete("build")
+}

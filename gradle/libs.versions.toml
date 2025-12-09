@@ -81,7 +81,7 @@ compose-bom = "2024.10.00"
 kotlin_compiler_extension_version = "1.5.13"
 compose-navigation = "2.8.3"
 compose-coil = "2.6.0"
-koin = "3.6.0"
+koin = "3.4.0"
 lifecycle = "2.8.4"
 
 
@@ -106,14 +106,13 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
 compose-uitest = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-compose-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-ui-navigation = { group = "androidx.navigation", name = "navigation-testing", version.ref = "compose-navigation" }
-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 #Koin
 koin_workManager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin" }
 koin_android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin_androidCompat = { group = "io.insert-koin", name = "koin-android-compat", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 #Kotlin
 kotlin_core = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
@@ -187,6 +186,7 @@ ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.r
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+okHttp3_core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 
 [bundles]
 koin = ["koin_workManager", "koin_android", "koin_androidCompat"]
