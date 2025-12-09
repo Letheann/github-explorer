@@ -23,6 +23,8 @@ class WelcomeViewModel(private val useCase: GithubReposUseCase) :
                         }
                     }.catch {
                         setState {
+                            it.cause
+                            it.message
                             copy(items = ViewResource.Error())
                         }
                     }.collect {

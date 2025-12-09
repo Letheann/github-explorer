@@ -19,7 +19,6 @@ internal fun Project.configAndroidDefault() {
     configure<BaseExtension> {
         buildFeatures.buildConfig = true
         compileSdkVersion(Config.compileSdk)
-        buildToolsVersion(Config.buildTools)
         testOptions.unitTests.isIncludeAndroidResources = true
 
         defaultConfig {

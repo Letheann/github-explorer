@@ -13,7 +13,7 @@ object Config {
     const val compileSdk = 34
     const val minSdkVersion = 21
     const val targetSdkVersion = 34
-    const val buildTools = "34.0.0"
+
 
     private fun getCurrentVersionName(): String =
         getVersionProperties()
