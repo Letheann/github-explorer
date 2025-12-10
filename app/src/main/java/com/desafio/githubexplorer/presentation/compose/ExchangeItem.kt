@@ -1,8 +1,6 @@
 package com.desafio.githubexplorer.presentation.compose
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,33 +12,34 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.desafio.githubexplorer.core.presentation.ViewResource
+import com.desafio.githubexplorer.core.theme.GithubAccent
+import com.desafio.githubexplorer.core.theme.GithubDarkSecondary
+import com.desafio.githubexplorer.core.theme.GithubTextSecondary
 import com.desafio.githubexplorer.presentation.ViewIntent
 import com.desafio.githubexplorer.presentation.WelcomeViewModel
-import com.desafio.shared.data.dto.Owner
 import com.desafio.shared.data.dto.Repo
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecyclerCompose(
     viewModel: WelcomeViewModel,
@@ -59,15 +58,6 @@ fun RecyclerCompose(
         }
     }
 
-    DisposableEffect(lifecycleOwner) {
-        val lifecycle = lifecycleOwner.lifecycle
-        lifecycle.addObserver(viewModel)
-        onDispose {
-            lifecycle.removeObserver(viewModel)
-            disposable.invoke()
-        }
-    }
-
     when (val states = uiState.searchResult) {
         is ViewResource.Success -> {
             LazyColumn(Modifier.fillMaxSize()) {
@@ -82,7 +72,7 @@ fun RecyclerCompose(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RepoCompose(
     repo: Repo,
@@ -93,8 +83,8 @@ fun RepoCompose(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = 4.dp
+        colors = CardDefaults.cardColors(containerColor = GithubDarkSecondary),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier
@@ -102,12 +92,14 @@ fun RepoCompose(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(repo.owner.avatarUrl),
-                contentDescription = repo.owner.login,
+            AsyncImage(
+                model = repo.owner.avatarUrl,
+                contentDescription = null,
                 modifier = Modifier
                     .size(64.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(CircleShape)
+                    .border(2.dp, GithubAccent.copy(alpha = 0.3f), CircleShape),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -115,7 +107,8 @@ fun RepoCompose(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = repo.fullName,
-                    style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.primary),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = GithubAccent,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -123,7 +116,8 @@ fun RepoCompose(
                 if (!repo.description.isNullOrBlank()) {
                     Text(
                         text = repo.description ?: "",
-                        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.onSurface),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = GithubTextSecondary,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -131,68 +125,28 @@ fun RepoCompose(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     repo.language?.let { language ->
                         Text(
                             text = "📝 $language",
-                            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.secondary)
+                            style = MaterialTheme.typography.labelSmall,
+                            color = GithubTextSecondary
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
                     Text(
                         text = "⭐ ${repo.stargazersCount}",
-                        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.secondary)
+                        style = MaterialTheme.typography.labelSmall,
+                        color = GithubTextSecondary
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = "🍴 ${repo.forksCount}",
-                        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.secondary)
+                        style = MaterialTheme.typography.labelSmall,
+                        color = GithubTextSecondary
                     )
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun RepoItemPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        RepoCompose(
-            repo = Repo(
-                id = 1,
-                name = "kotlin-explorer",
-                fullName = "user/kotlin-explorer",
-                description = "A sample Kotlin repo",
-                htmlUrl = "https://github.com/user/kotlin-explorer",
-                language = "Kotlin",
-                stargazersCount = 123,
-                watchersCount = 100,
-                forksCount = 45,
-                openIssuesCount = 5,
-                owner = Owner(
-                    id = 1,
-                    login = "user",
-                    avatarUrl = "https://avatars.githubusercontent.com/u/1?v=4",
-                    htmlUrl = "https://github.com/user",
-                    type = "User"
-                ),
-                createdAt = "2025-01-01T12:00:00Z",
-                updatedAt = "2025-12-08T12:00:00Z",
-                pushedAt = "2025-12-08T12:00:00Z",
-                isPrivate = false,
-                isFork = false,
-                defaultBranch = "main",
-                topics = listOf("kotlin", "android")
-            ),
-            invokeClick = { _, _ -> }
-        )
     }
 }

@@ -73,6 +73,7 @@ class KmpPlugin : Plugin<Project> {
 
                     commonTest.dependencies {
                         implementation(libs.findLibrary("kotlin-test").orElseThrow())
+                        implementation(libs.findLibrary("test_coroutines").orElseThrow())
                     }
                 }
             }

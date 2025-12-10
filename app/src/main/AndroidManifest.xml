@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Githubexplorer">
         <activity
-            android:name="com.desafio.githubexplorer.presentation.WelcomeActivity"
+            android:name="com.desafio.githubexplorer.presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Githubexplorer">
@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.desafio.githubexplorer.presentation.WelcomeActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Githubexplorer" />
     </application>
 
 </manifest>
