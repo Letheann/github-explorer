@@ -18,8 +18,8 @@ A modern Android application for exploring GitHub repositories, built with Kotli
 ## Screenshots
 
 | Repositories | Detail |
-|:---:|:---:|
-| Grid view with search | Stats and info |
+|-------------|--------|
+| <img width="382" height="856" alt="image" src="https://github.com/user-attachments/assets/332f0fd4-c72b-49b0-8500-fe23fcb937d3" /> | <img width="382" height="856" alt="image" src="https://github.com/user-attachments/assets/65bda073-ca11-47ba-8598-65cef7b57619" /> |
 
 ## Architecture
 
