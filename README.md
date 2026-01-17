@@ -80,7 +80,7 @@ The project follows **Clean Architecture** principles with **MVI** (Model-View-I
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/github-explorer.git
+git clone https://github.com/Letheann/github-explorer
 
 # Open in Android Studio and sync Gradle
 
